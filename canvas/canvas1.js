@@ -53,36 +53,49 @@ window.onload = function () {
 
     /** COMPILE PROGRAM */
     /** VARTEX shader code */
-    // const vs = gl.createShader(gl.VARTEX_SHADER);
-    // gl.shaderSource(vs, vs_source);
-    // gl.compileShader(vs);
+    const vs = gl.createShader(gl.VARTEX_SHADER);
+    gl.shaderSource(vs, vs_source);
+    gl.compileShader(vs);
 
-    // if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
-    //     console.error('__SHADER_ERROR__', gl.getShaderParameter(vs, gl.COMPILE_STATUS));
-    //     alert(gl.getShaderInfoLog(vs));
-    //     gl.deleteShader(vs);
-    // }
+    if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
+        console.error('__SHADER_ERROR__', gl.getShaderParameter(vs, gl.COMPILE_STATUS));
+        alert(gl.getShaderInfoLog(vs));
+        gl.deleteShader(vs);
+    }
 
     /** Fragment shader code */
-    // const fs = gl.createShader(gl.FRAGMENT_SHADER);
-    // gl.shaderSource(fs, fx_source);
-    // gl.compileShader(fs);
+    const fs = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fs, fx_source);
+    gl.compileShader(fs);
 
-    // if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
-    //     console.error('__FRAGMENT_SHADER_ERROR__', gl.getShaderParameter(fs, gl.COMPILE_STATUS));
-    //     alert(gl.getShaderInfoLog(fs));
-    //     gl.deleteShader(fs);
-    // }
+    if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+        console.error('__FRAGMENT_SHADER_ERROR__', gl.getShaderParameter(fs, gl.COMPILE_STATUS));
+        alert(gl.getShaderInfoLog(fs));
+        gl.deleteShader(fs);
+    }
 
     // /** create program for compile */
-    // prog = gl.createProgram();
-    // gl.attachShader(prog, vs);
-    // gl.attachShader(prog, fs);
-    // gl.linkProgram(prog);
+    prog = gl.createProgram();
+    gl.attachShader(prog, vs);
+    gl.attachShader(prog, fs);
+    gl.linkProgram(prog);
 
-    // if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-    //     alert(gl.getProgramInfoLog(prog));
-    // }
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+        alert(gl.getProgramInfoLog(prog));
+    }
+
+    /** Uniform variables */
+    const m = gl.getUniformLocation(prog, 'trans');
+
+    let matrix = [
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 0, 1
+    ];
+
+    gl.useProgram(prog);
+    gl.uniformMatrix4fv(m, false, matrix);
 
 
 }
