@@ -90,12 +90,61 @@ window.onload = function () {
     let matrix = [
         1, 0, 0, 0,
         0, 1, 0, 0,
-        0, 1, 0, 0,
+        0, 0, 1, 0,
         0, 0, 0, 1
     ];
 
     gl.useProgram(prog);
     gl.uniformMatrix4fv(m, false, matrix);
+
+    /**
+     * In rendering GLSL code explanation for
+     * ------------------
+     * vartex_shader
+     * ------------------
+     * attribute vec3 pos;
+     * attribute vec4 clr;
+     * 
+     * uniform mat4 trans;
+     * varying vec4 vcolor;
+     * 
+     * void main() {
+     *    gl_Position = trans * vec4(pos, 1);
+     *    vcolor = clr;
+     * }
+     * 
+     * --------------------
+     * fragment_shader
+     * --------------------
+     * 
+     * precision mediump float;
+     * varying vec4 vcolor;
+     * 
+     * void main() {
+     *    gl_FragColor = vcolor;
+     * }
+     */
+
+    // attribute vec3 pos;
+    // attribute vec4 clr;
+    const p = gl.getAttribLocation(prog, 'pos');
+    gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
+    gl.vartexAttribPointer(p, 3, gl.FLOAT, false, 0, 0);
+    gl.enableVartexAttribArray(p);
+
+    const c = gl.getAttribLocation(prog, 'clr');
+    gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
+    gl.vartexAttribPointer(c, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVartexAttribArray(c);
+
+
+    /**
+     * before compile clear screen
+     * vertex-shader -> rasterizer -> fragment-shader -> rendering
+     */
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(prog);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
 
 
 }
