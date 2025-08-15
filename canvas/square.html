@@ -135,7 +135,7 @@
         const p = gl.getAttribLocation(prog, 'pos');
         gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
         gl.vertexAttribPointer(p, 3, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(c);
+        gl.enableVertexAttribArray(p);
 
         const c = gl.getAttribLocation(prog, 'clr');
         gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
