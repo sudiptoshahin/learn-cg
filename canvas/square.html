@@ -8,26 +8,60 @@
 </head>
 
 <script id="vertexShader" type="x-shader/x-vertex">
-    attribute vec3 pos;
-    attribute vec4 clr;
+// A vertex shader program that runs on the GPU.
 
-    uniform mat4 trans;
-    varying vec4 vcolor;
+/*
+ * attribute vec3 pos; => Input attribute variable for the vertex's 3D position (x, y, z).
+ * attribute vec4 clr; => Input attribute variable for the vertex's color (r, g, b, a).
+ * uniform mat4 trans; => Uniform variable for the 4x4 transformation matrix, which is the same for all vertices.
+*/
+attribute vec3 pos;
+attribute vec4 clr;
 
-    void main() {
-        gl_Position = trans * vec4(pos, 1);
-        vcolor = clr;
-    }
+uniform mat4 trans;
+// Output varying variable to pass the vertex color to the fragment shader.
+varying vec4 vcolor;
+
+// The main function where the shader's execution begins for each vertex.
+void main() {
+    /*
+     * * gl_Position is a built-in output variable for the vertex's final, transformed position.
+     * * It is calculated by multiplying the 4x4 transformation matrix by the vertex's 3D position (converted to a vec4).
+     * * This is a special built-in variable that tells WebGL the final clip space coordinates of the vertex.
+     * *Clip space is the stage right before perspective division and rasterization.
+    */
+    gl_Position = trans * vec4(pos, 1);
+    
+    // The vertex color is passed to the varying variable vcolor.
+    // This value will be automatically interpolated across the polygon's surface by the GPU.
+    // Passes the vertexs color to the fragment shader for interpolation.
+    vcolor = clr;
+}
 </script>
 
 <script id="fragmentShader" type="x-shader/x-fragment">
-    precision mediump float;
+/*
+ # Sets the precision for floating-point variables in fragment shader.
+ # `mediump` is a good balance of performance and accuracy for most use cases on mobile devices.
+precision mediump float;
+*/
 
-    varying vec4 vcolor;
+/*
+ # Declares a varying variable named `vcolor` of type `vec4`.
+ # This variable receives the interpolated color value from the vertex shader.
+ # The GPU automatically calculates the color for each pixel on the polygon's surface based on the vertex colors.
+*/
+varying vec4 vcolor;
 
-    void main() {
-        gl_FragColor = vcolor;
-    }
+// The main function where the shader's execution begins for each pixel.
+void main() {
+    /*
+     # `gl_FragColor` is a built-in output variable for the final color of the pixel.
+     # Here, we simply assign the interpolated color (`vcolor`) to the pixel.
+     # The result is a smooth gradient of color across the polygon.
+    */
+    gl_FragColor = vcolor;
+}
 </script>
 
 <script type="text/javascript">
