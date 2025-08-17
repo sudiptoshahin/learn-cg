@@ -40,33 +40,33 @@ void main() {
 </script>
 
 <script id="fragmentShader" type="x-shader/x-fragment">
-/*
- # Sets the precision for floating-point variables in fragment shader.
- # `mediump` is a good balance of performance and accuracy for most use cases on mobile devices.
-precision mediump float;
-*/
+    /***
+    * Sets the precision for floating-point variables in fragment shader.
+    * `mediump` is a good balance of performance and accuracy for most use cases on mobile devices.
+    precision mediump float;
+    ****/
+    precision mediump float;
 
-/*
- # Declares a varying variable named `vcolor` of type `vec4`.
- # This variable receives the interpolated color value from the vertex shader.
- # The GPU automatically calculates the color for each pixel on the polygon's surface based on the vertex colors.
-*/
-varying vec4 vcolor;
-
-// The main function where the shader's execution begins for each pixel.
-void main() {
     /*
-     # `gl_FragColor` is a built-in output variable for the final color of the pixel.
-     # Here, we simply assign the interpolated color (`vcolor`) to the pixel.
-     # The result is a smooth gradient of color across the polygon.
+     * Declares a varying variable named `vcolor` of type `vec4`.
+     * This variable receives the interpolated color value from the vertex shader.
+     * The GPU automatically calculates the color for each pixel on the polygon's surface based on the vertex colors.
     */
-    gl_FragColor = vcolor;
-}
+    varying vec4 vcolor;
+
+    void main() {
+        /***
+        * `gl_FragColor` is a built-in output variable for the final color of the pixel.
+        * Here, we simply assign the interpolated color (`vcolor`) to the pixel.
+        * The result is a smooth gradient of color across the polygon.
+        ***/
+        gl_FragColor = vcolor;
+    }
 </script>
 
 <script type="text/javascript">
-    
-    window.onload = function() {
+
+    window.onload = function () {
         // Initilize WebGL
         const canvas = document.getElementById('mycanvas');
         const gl = canvas.getContext('webgl');
@@ -85,6 +85,10 @@ void main() {
         /**************************************/
         // Initialize vertex buffer object
         // 2 triangle for a square
+        // Defines a JavaScript array named `positions` to hold the x, y, z coordinates of a rectangle's vertices.
+        // The rectangle is composed of two triangles, defined by 6 vertices in total.
+        // The first triangle's vertices are at (-0.8, 0.4), (0.8, 0.4), and (0.8, -0.4).
+        // The second triangle's vertices are at (-0.8, 0.4), (0.8, -0.4), and (-0.8, -0.4).
         let positions = [
             -0.8, 0.4, 0,
             0.8, 0.4, 0,
@@ -94,23 +98,42 @@ void main() {
             -0.8, -0.4, 0
         ];
 
+        // Defines a JavaScript array named `colors` to hold the RGBA color data for each of the 6 vertices.
+        // The colors are in the range of 0 to 1.
+        // Each group of four numbers corresponds to a vertex in the `positions` array.
         let colors = [
-            1, 0, 0, 1,
-            0, 1, 0, 1,
-            0, 0, 1, 1,
-            1, 0, 0, 1,
-            0, 0, 1, 1,
-            1, 0, 1, 1
+            1, 0, 0, 1, // Red for the first vertex.
+            0, 1, 0, 1, // Green for the second vertex.
+            0, 0, 1, 1, // Blue for the third vertex.
+            1, 0, 0, 1, // Red for the fourth vertex.
+            0, 0, 1, 1, // Blue for the fifth vertex.
+            1, 0, 1, 1  // Magenta for the sixth vertex.
         ];
 
+        // Creates a new buffer object on the GPU. createBuffer() → asks GPU to make a 
+        // new memory spot for vertex data.
         let position_buffer = gl.createBuffer();
+        // Binds the new buffer as the active `ARRAY_BUFFER`. Subsequent commands 
+        // will operate on this buffer.
+        // bindBuffer(gl.ARRAY_BUFFER, ...) → tells WebGL, “From now on, 
+        // when I upload vertex data, send it to this buffer.”
+        // Only one buffer can be bound to gl.ARRAY_BUFFER at a time, so this replaces 
+        // whatever was bound before.
         gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
+        // Fills the active buffer with the data from the `positions` array.
+        // gl.bufferData(...) → sends it to GPU memory.
+        // sends that binary data into the bound buffer
         gl.bufferData(
-            gl.ARRAY_BUFFER,
+            gl.ARRAY_BUFFER, // Specifies that the data is for the currently bound array buffer.
+            // Converts the JavaScript array into a typed array of 32-bit floats, which the GPU requires. 
+            // new Float32Array(positions) → converts the JS array into the raw binary format the GPU understands.
             new Float32Array(positions),
+            // Provides a hint to the GPU that the data won't change frequently, allowing for optimization.
             gl.STATIC_DRAW
         );
 
+        // Ask WebGL to reserve a chunk of GPU memory
+        // This buffer will store the pre-vartex color data.
         let color_buffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
         gl.bufferData(
@@ -120,34 +143,76 @@ void main() {
         );
 
         // Compile the vertex and fragment shaders into a program
+        // Retrieves the GLSL source code for the vertex shader from the 
+        // <script> element with the ID 'vertexShader'.
         const vs_source = document.getElementById('vertexShader').text;
 
+        // Creates a new empty shader object on the GPU for a vertex shader.
+        // The `gl.VERTEX_SHADER` constant specifies the type of shader to create.
         const vs = gl.createShader(gl.VERTEX_SHADER);
+
+        // Sets the GLSL source code for the shader object. 
+        // The source code is read from the `vs_source` variable.
         gl.shaderSource(vs, vs_source);
+
+        // Compiles the shader source code that was just attached to the shader object.
+        // The GPU's driver translates the GLSL code into a low-level instruction set.
         gl.compileShader(vs);
 
+        // Checks the compilation status of the shader.
+        // `gl.getShaderParameter` retrieves information about the shader.
+        // `gl.COMPILE_STATUS` is a constant that checks if the compilation was successful.
         if (!gl.getShaderParameter(vs, gl.COMPILE_STATUS)) {
+            // If compilation fails, this block is executed.
+            // An alert box is shown with the compilation log, which contains error messages.
             alert(gl.getShaderInfoLog(vs));
+            // The shader object is deleted from the GPU to free up resources.
             gl.deleteShader(vs);
         }
 
+        // Fetches the GLSL source code for the fragment shader from an HTML element with 
+        // the id 'fragmentShader'.
         const fs_source = document.getElementById('fragmentShader').text;
 
+        // Creates a new empty shader object on the GPU. The `gl.FRAGMENT_SHADER` 
+        // constant specifies that this shader will process pixel colors.
         const fs = gl.createShader(gl.FRAGMENT_SHADER);
+
+        // Attaches the retrieved GLSL source code (`fs_source`) to the newly created shader 
+        // object (`fs`).
         gl.shaderSource(fs, fs_source);
+
+        // Compiles the GLSL source code into a program that the GPU can execute.
         gl.compileShader(fs);
 
+        // Checks if the shader compilation was successful. The `gl.getShaderParameter` 
+        // function returns the compilation status.
         if (!gl.getShaderParameter(fs, gl.COMPILE_STATUS)) {
+            // If compilation fails, this block is executed.
+            // Displays an alert with the shader's error log, which helps in debugging syntax errors.
             alert(gl.getShaderInfoLog(fs));
+            // Deletes the shader object to free up GPU resources since it failed to compile.
             gl.deleteShader(fs);
         }
 
+        // Creates a new empty WebGL program object on the GPU.
+        // A program is a container that links together multiple compiled shaders 
+        // (like a vertex and a fragment shader) to create a single executable program.
         const prog = gl.createProgram();
+
+        // Attaches the previously compiled vertex shader (`vs`) to the program object.
         gl.attachShader(prog, vs);
+        // Attaches the previously compiled fragment shader (`fs`) to the program object.
         gl.attachShader(prog, fs);
+
+        // Links the attached shaders together to create an executable program.
+        // The GPU performs a series of final checks and optimizations to ensure the 
+        // shaders can work together.
         gl.linkProgram(prog);
 
+        // Checks if the program linking process was successful.
         if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+            // If linking fails, an alert box is displayed with the linking error log.
             alert(gl.getProgramInfoLog(prog));
         }
 
@@ -190,13 +255,13 @@ void main() {
 </script>
 
 <style>
-#mycanvas {
-    width: 50%;
-    height: 50%;
-    margin: auto;
-    display: block;
-    border: 1px solid black;
-}
+    #mycanvas {
+        width: 50%;
+        height: 50%;
+        margin: auto;
+        display: block;
+        border: 1px solid black;
+    }
 </style>
 
 <body>
