@@ -248,6 +248,14 @@ void main() {
         gl.useProgram(prog);
         gl.drawArrays(gl.TRIANGLES, 0, 6);
 
+        // after removing duplicates for vertex array
+        // gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+
+        // gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+
+        //  most optimized forms
+        // gl.drawElements(gl.TRIANGLE_STRIP, 2, ....);
 
 
     }
