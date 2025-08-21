@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Babylon.js sample code</title>
+
+    <!-- Babylon.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+    <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+    <script src="https://cdn.babylonjs.com/recast.js"></script>
+    <script src="https://cdn.babylonjs.com/ammo.js"></script>
+    <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+    <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+    <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://cdn.babylonjs.com/addons/babylonjs.addons.min.js"></script>
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+    <style>
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+
+      #canvasZone {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="canvasZone"><canvas id="renderCanvas"></canvas></div>
+    <script>
+      var canvas = document.getElementById("renderCanvas");
+
+      var startRenderLoop = function (engine, canvas) {
+        engine.runRenderLoop(function () {
+          if (sceneToRender && sceneToRender.activeCamera) {
+            sceneToRender.render();
+          }
+        });
+      };
+
+      var engine = null;
+      var scene = null;
+      var sceneToRender = null;
+      var createDefaultEngine = function () {
+        return new BABYLON.Engine(canvas, true, {
+          preserveDrawingBuffer: true,
+          stencil: true,
+          disableWebGL2Support: false,
+        });
+      };
+      class Playground {
+        static CreateScene(engine, canvas) {
+          // This creates a basic Babylon Scene object (non-mesh)
+          var scene = new BABYLON.Scene(engine);
+          
+          /**
+           * Adding camera
+           * FreeCamera means that the camera can be moved freely in the scene.
+           * The first parameter is the name of the camera
+           * the second parameter is the position `new BABYLON.Vector3(0, 5, -10)` of the camera in the scene
+           * the third parameter is the scene to which the camera belongs
+           * The camera is set to look at the origin of the scene (0,0,0)
+           * The camera is attached to the canvas so that it can be controlled by the user
+           * The light is a hemispheric light, which means it simulates a light source coming
+           * from the sky and illuminating the scene from above.
+           * **/
+
+          var camera = new BABYLON.FreeCamera(
+            "camera1",
+            new BABYLON.Vector3(0, 5, -10),
+            scene
+          );
+          camera.setTarget(BABYLON.Vector3.Zero());
+          camera.attachControl(canvas, true);
+          // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
+          /**
+           * Adding Light
+           * The first parameter is the name of the light
+           * The second parameter is the direction of the light, in this case, it is pointing
+           * upwards (0,1,0) which means it is a hemispheric light.
+           * The third parameter is the scene to which the light belongs
+           * The light is set to an intensity of 0.7, which means it is not too bright.
+           * The light will illuminate the scene from above, creating a soft light effect
+           * **/
+          var light = new BABYLON.HemisphericLight(
+            "light1",
+            // new BABYLON.Vector3(-3, 5, -3),
+            new BABYLON.Vector3(0, 1, -10),
+            scene
+          );
+          light.intensity = 0.5;
+          // Our built-in 'sphere' shape. Params: name, options, scene
+          var sphere = BABYLON.MeshBuilder.CreateSphere(
+            "sphere",
+            { diameter: 2, segments: 32 },
+            scene
+          );
+          // Move the sphere upward 1/2 its height
+          sphere.position.y = 1;
+          sphere.position.z = 0;
+          // Our built-in 'ground' shape. Params: name, options, scene
+          
+          let sphereMaterial = new BABYLON.StandardMaterial('sphereMat', scene);
+          sphereMaterial.diffuseColor = new BABYLON.Color3(0.2, 0.6, 1); // light blue
+          sphere.material = sphereMaterial;
+
+          var ground = BABYLON.MeshBuilder.CreateGround(
+            "ground",
+            { width: 10, height: 10 },
+            scene
+          );
+          return scene;
+        }
+      }
+      createScene = function () {
+        return Playground.CreateScene(engine, engine.getRenderingCanvas());
+      };
+      window.initFunction = async function () {
+        var asyncEngineCreation = async function () {
+          try {
+            return createDefaultEngine();
+          } catch (e) {
+            console.log(
+              "the available createEngine function failed. Creating the default engine instead"
+            );
+            return createDefaultEngine();
+          }
+        };
+
+        window.engine = await asyncEngineCreation();
+
+        const engineOptions = window.engine.getCreationOptions?.();
+        if (!engineOptions || engineOptions.audioEngine !== false) {
+        }
+        if (!engine) throw "engine should not be null.";
+        startRenderLoop(engine, canvas);
+        window.scene = createScene();
+      };
+      initFunction().then(() => {
+        sceneToRender = scene;
+      });
+
+      // Resize
+      window.addEventListener("resize", function () {
+        engine.resize();
+      });
+    </script>
+  </body>
+</html>
