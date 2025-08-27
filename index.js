@@ -7,11 +7,14 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+// serve static files from public
+app.use(express.static(path.join(__dirname, "public")));
+
 // Root route
 app.get("/", (req, res) => {
-    console.log('__dir_name__', __dirname);
-//   res.json({ id: 1, message: "Hello, Node.js with Express!" });
-    res.sendFile(path.join(__dirname, 'babylon/2babylon_scene.html'));
+  console.log("__dir_name__", __dirname);
+  //   res.json({ id: 1, message: "Hello, Node.js with Express!" });
+  res.sendFile(path.join(__dirname, "babylon/2babylon_scene.html"));
 });
 
 // 404 handler (for all other routes)

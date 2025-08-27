@@ -41,11 +41,12 @@
         const scene = new BABYLON.Scene(engine);
 
         // Camera
-        const camera = new BABYLON.FreeCamera(
-          "camera1",
-          new BABYLON.Vector3(0, 5, -10),
-          scene
-        );
+        // const camera = new BABYLON.FreeCamera(
+        //   "camera1",
+        //   new BABYLON.Vector3(20, 3, -10),
+        //   scene
+        // );
+        const camera = new BABYLON.ArcRotateCamera('arcCamera', -Math.PI/2, Math.PI/2.5, 15, new BABYLON.Vector3(0, 0, 0));
         camera.setTarget(BABYLON.Vector3.Zero());
         camera.attachControl(canvas, true);
 
@@ -64,7 +65,7 @@
           scene
         );
 
-        // Import GLB model
+        // Import GLB model from Files
         BABYLON.SceneLoader.ImportMeshAsync(
         null,
         "assets/",     // now relative to /public
@@ -72,13 +73,26 @@
         scene
         ).then((result) => {
         const importedMesh = result.meshes[0];
-        importedMesh.position.x = 2;
+        importedMesh.position.x = 3.5;
+        importedMesh.position.y = 1;
+        importedMesh.position.z = 0;
         importedMesh.scaling = new BABYLON.Vector3(2, 2, 2);
+
+        // importedMesh.rotation.y = Math.PI;
 
         const myMesh1 = scene.getMeshByName("myMesh_1");
         if (myMesh1) {
             myMesh1.rotation.y = Math.PI / 2;
         }
+        });
+
+        BABYLON.ImportMeshAsync("https://assets.babylonjs.com/meshes/both_houses_scene.babylon").then((result) => {
+          const house1 = scene.getMeshByName('detached_house');
+          house1.position.y = 1;
+          house1.position.x = 5;
+          
+          const house2 = result.meshes[2];
+          house2.position.y = 1;
         });
 
         return scene;
