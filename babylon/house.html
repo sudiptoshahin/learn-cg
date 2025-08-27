@@ -43,14 +43,37 @@
         camera.attachControl(canvas, true);
         const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(1, 2, 0));
 
+        /** Materials **/
+        // colors
+        const groundMat = new BABYLON.StandardMaterial('groundMaterial');
+        groundMat.diffuseColor = BABYLON.Color3.Green();
+
+        // textures
+        const roofMat = new BABYLON.StandardMaterial('roofMat');
+        roofMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/roof.jpg");
+
+        const boxMat = new BABYLON.StandardMaterial('boxMat');
+        boxMat.diffuseTexture = new BABYLON.Texture("https://www.babylonjs-playground.com/textures/floor.png");
+
+        const stoneGroundMat = new BABYLON.StandardMaterial('stoneGroundMat');
+        stoneGroundMat.diffuseTexture = new BABYLON.Texture("/assets/texture_stone.jpeg");
+
+        const heystackMat = new BABYLON.StandardMaterial('heyStackMat');
+        heystackMat.diffuseTexture = new BABYLON.Texture('/assets/texture_haystack.jpg');
+
+
+        /** World Objects **/
         const box = BABYLON.MeshBuilder.CreateBox("box", {});
+        box.material = stoneGroundMat;
         box.position.y = 0.5;
         const roof = BABYLON.MeshBuilder.CreateCylinder("roof", {diameter: 1.3, height: 1.2, tessellation: 3});
+        roof.material = heystackMat;
         roof.scaling.x = 0.75;
         roof.rotation.z = Math.PI / 2;
         roof.position.y = 1.22;
 
         const ground = BABYLON.MeshBuilder.CreateGround('ground', {width: 10, height: 10});
+        ground.material = boxMat;
 
 
         return scene;
