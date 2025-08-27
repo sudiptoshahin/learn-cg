@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Babylon.js Sample Code</title>
+
+    <!-- Babylon.js + loaders -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+
+    <style>
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+      // Grab canvas
+      const canvas = document.getElementById("renderCanvas");
+      // Create engine
+      const engine = new BABYLON.Engine(canvas, true);
+
+      /** Add Audio **/
+      async function initAudio() {
+        const audioEngine = await BABYLON.CreateAudioEngineAsync();
+        await audioEngine.unlock();
+
+        BABYLON.CreateStreamingSoundAsync(
+            'backgroundMusic',
+            "https://amf-ms.github.io/AudioAssets/cc-music/electronic/Soulsonic--No.mp3",
+            { autoplay: true, loop: true },
+            audioEngine
+        ).play();
+      }
+
+      // Create scene
+      function createScene() {
+        const scene = new BABYLON.Scene(engine);
+        /** Set the camera and light **/
+        const camera = new BABYLON.ArcRotateCamera('camera', -Math.PI/2, -Math.PI/2.5, 10, new BABYLON.Vector3(0, 0, 0));
+        camera.attachControl(canvas, true);
+
+        const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(1, 1, 0));
+
+        const box = BABYLON.MeshBuilder.CreateBox('box', {});
+        box.position = new BABYLON.Vector3(-2, -6, 0.1);
+
+        const box1 = BABYLON.MeshBuilder.CreateBox('box1', { width: 2, height: 1.5, depth: 3 });
+        box.position.y = 0.75;
+
+        const box2 = BABYLON.MeshBuilder.CreateBox('box2', {});
+        box2.scaling.x = 2;
+        box2.scaling.y = 1.5;
+        box2.scaling.z = 3;
+        box2.position = new BABYLON.Vector3(-3, 0.75, 0);
+
+        const box3 = BABYLON.MeshBuilder.CreateBox('box3', {});
+        box3.scaling = new BABYLON.Vector3(2, 1.5, 3);
+        box3.position.x = 3;
+        box3.position.y = 0.75;
+        box3.position.z = 0;
+
+        const box4 = BABYLON.MeshBuilder.CreateBox('box4', {width: 1, height: 5, depth: 1});
+        box4.position = new BABYLON.Vector3(0, 1, 3);
+        box4.rotation.y = Math.PI / 4;
+
+        initAudio();
+        const ground = BABYLON.MeshBuilder.CreateGround('ground', {width: 10, height: 10});
+
+
+        return scene;
+      }
+
+      const scene = createScene();
+
+      // Render loop
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+
+      // Resize
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    </script>
+  </body>
+</html>

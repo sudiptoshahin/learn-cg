@@ -12,9 +12,15 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Root route
 app.get("/", (req, res) => {
-  console.log("__dir_name__", __dirname);
-  //   res.json({ id: 1, message: "Hello, Node.js with Express!" });
   res.sendFile(path.join(__dirname, "babylon/2babylon_scene.html"));
+});
+
+// app.get('/village', (req, res) => {
+//   res.sendFile(path.join(__dirname, 'babylon/a_village.html'));
+// });
+
+app.get('/village/buildings', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/buildings.html'));
 });
 
 // 404 handler (for all other routes)
