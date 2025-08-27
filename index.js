@@ -23,6 +23,10 @@ app.get('/village/buildings', (req, res) => {
   res.sendFile(path.join(__dirname, 'babylon/buildings.html'));
 });
 
+app.get('/village/house', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/house.html'));
+});
+
 // 404 handler (for all other routes)
 app.use((req, res) => {
   res.status(404).send("Not Found");
