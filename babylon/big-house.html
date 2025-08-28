@@ -54,6 +54,15 @@
         const box = buildBox();
         const roof = buildRoof();
 
+        const merged = BABYLON.Mesh.MergeMeshes(
+            [box, roof],   // 1. meshes to merge
+            true,          // 2. dispose originals
+            false,         // 3. allow 32-bit indices? no
+            null,          // 4. default Mesh
+            true,         // 5. don't preserve submeshes
+            true           // 6. allow multiple materials
+        );
+
         return scene;
 
       }
@@ -61,7 +70,7 @@
 
       function buildGround() {
         const groundMat = new BABYLON.StandardMaterial('groundMat');
-        groundMat.diffuseColor = new BABYLON.Vector3(0, 1, 0);
+        groundMat.diffuseColor = new BABYLON.Color3(0, 1, 0);
 
         const ground = BABYLON.MeshBuilder.CreateGround('ground', {width: 10, height: 10});
         ground.material = groundMat;

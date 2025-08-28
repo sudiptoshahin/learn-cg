@@ -15,10 +15,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "babylon/2babylon_scene.html"));
 });
 
-// app.get('/village', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'babylon/a_village.html'));
-// });
-
 app.get('/village/buildings', (req, res) => {
   res.sendFile(path.join(__dirname, 'babylon/buildings.html'));
 });
@@ -29,6 +25,10 @@ app.get('/village/house', (req, res) => {
 
 app.get('/village/big-house', (req, res) => {
   res.sendFile(path.join(__dirname, 'babylon/big-house.html'));
+});
+
+app.get('/village/a-village', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/a_village.html'));
 });
 
 // 404 handler (for all other routes)
