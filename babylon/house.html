@@ -62,9 +62,12 @@
 
         const heystackMat = new BABYLON.StandardMaterial('heyStackMat');
         heystackMat.diffuseTexture = new BABYLON.Texture('/assets/texture_haystack.jpg');
-
-        const grassMat = new BABYLON.StandardMaterial('grassMat');
-        grassMat.diffuseTexture = new BABYLON.Texture('/assets/texture_grass.jpg');
+        
+        const grassMat = new BABYLON.PBRMaterial('grassMat', scene);
+        grassMat.albedoTexture = new BABYLON.Texture('/assets/texture_grass.jpg', scene);
+        // Optionally, you can add more PBR properties for realism, e.g.:
+        grassMat.metallic = 0;
+        grassMat.roughness = 1;
 
 
         //options parameter to set different images on each side

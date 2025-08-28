@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Babylon.js Sample Code</title>
+
+    <!-- Babylon.js + loaders -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+
+    <style>
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+      // Grab canvas
+      const canvas = document.getElementById("renderCanvas");
+      // Create engine
+      const engine = new BABYLON.Engine(canvas, true);
+
+      // Create scene
+      function createScene() {
+        const scene = new BABYLON.Scene(engine);
+
+        // set the camera and the light
+        const camera = new BABYLON.ArcRotateCamera(
+            'camera',
+            -Math.PI/2,
+            Math.PI/2.5,
+            10,
+            new BABYLON.Vector3(0, 0, 0)
+        );
+        camera.attachControl(canvas, true);
+        const light = new BABYLON.HemisphericLight('light', new BABYLON.Vector3(1, 1, 0));
+
+        const ground = buildGround();
+        const box = buildBox();
+        const roof = buildRoof();
+
+        return scene;
+
+      }
+
+
+      function buildGround() {
+        const groundMat = new BABYLON.StandardMaterial('groundMat');
+        groundMat.diffuseColor = new BABYLON.Vector3(0, 1, 0);
+
+        const ground = BABYLON.MeshBuilder.CreateGround('ground', {width: 10, height: 10});
+        ground.material = groundMat;
+      }
+
+      function buildBox() {
+        const boxMat = new BABYLON.StandardMaterial("boxMat");
+        boxMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/semihouse.png");
+
+
+        /** End of Materials **/
+
+        const faceUV = [];
+        faceUV[0] = new BABYLON.Vector4(0.6, 0.0, 1.0, 1.0); // rear face
+        faceUV[1] = new BABYLON.Vector4(0.0, 0.0, 0.4, 1.0); // front face
+        faceUV[2] = new BABYLON.Vector4(0.4, 0, 0.6, 1.0); // right side
+        faceUV[4] = new BABYLON.Vector4(0.4, 0, 0.6, 1.0); // left side
+        // top 4 and bottom4 not seen so not set
+
+        /** World object **/
+        const box = BABYLON.MeshBuilder.CreateBox('box', { width: 2, height: .75, faceUV: faceUV, wrap: true });
+        box.material = boxMat;
+        box.position.y = 0.5;
+
+        return box;
+      }
+      
+      function buildRoof() {
+        const roofMat = new BABYLON.StandardMaterial("roofMat");
+        roofMat.diffuseTexture = new BABYLON.Texture("https://assets.babylonjs.com/environments/roof.jpg");
+
+
+
+        const roof = BABYLON.MeshBuilder.CreateCylinder("roof", {diameter: 1.3, height: 1.2, tessellation: 3});
+        roof.material = roofMat;
+        roof.scaling.x = 0.75;
+        roof.scaling.y = 2;
+        roof.rotation.z = Math.PI / 2;
+        roof.position.y = 1.05;
+
+        return roof;
+      }
+
+      const scene = createScene();
+
+      // Render loop
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+
+      // Resize
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    </script>
+  </body>
+</html>
