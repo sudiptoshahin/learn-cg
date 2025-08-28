@@ -35,6 +35,10 @@ app.get('/village/test-a-village', (req, res) => {
   res.sendFile(path.join(__dirname, 'babylon/test-village-glb.html'));
 });
 
+app.get('/animation/parent-child', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/parent-child.html'));
+});
+
 // 404 handler (for all other routes)
 app.use((req, res) => {
   res.status(404).send("Not Found");
