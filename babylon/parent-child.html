@@ -70,7 +70,7 @@
 
         boxParent.rotation.x = 0;
         boxParent.rotation.y = 0;
-        boxParent.rotation.z = -Math.PI / 4;  
+        boxParent.rotation.z = -Math.PI / 4;
 
         const boxChildAxis = localAxis(1, scene);
         boxChildAxis.parent = boxChild;
@@ -97,9 +97,13 @@
         }
 
         // x-plane
-        const axisX = BABYLON.MeshBuilder.CreateLines('axisX', {points: [
-            new BABYLON.Vector3.Zero(), new BABYLON.Vector3(size, 0, 0), new BABYLON.Vector3(size*0.95, 0.05*size, 0),
-            new BABYLON.Vector3(size, 0, 0), new BABYLON.Vector3(size*0.95, -0.05*size, 0)
+        const axisX = BABYLON.MeshBuilder.CreateLines('axisX', {
+          points: [
+            new BABYLON.Vector3.Zero(),
+            new BABYLON.Vector3(size, 0, 0),
+            new BABYLON.Vector3(size*0.95, 0.05*size, 0),
+            new BABYLON.Vector3(size, 0, 0),
+            new BABYLON.Vector3(size*0.95, -0.05*size, 0)
         ]});
         axisX.color = new BABYLON.Color3(1, 0, 0);
         const xChar = makeTextPlane('X', 'red', size/10);
@@ -107,16 +111,22 @@
 
         // y-plane
         const axisY = BABYLON.MeshBuilder.CreateLines('axisY', {points: [
-            new BABYLON.Vector3.Zero(), new BABYLON.Vector3(0, size, 0), new BABYLON.Vector3(-0.05*size, size*0.95, 0),
-            new BABYLON.Vector3(0, size, 0), new BABYLON.Vector3(0.05*size, size*0.95, 0)
+            new BABYLON.Vector3.Zero(),
+            new BABYLON.Vector3(0, size, 0),
+            new BABYLON.Vector3(-0.05*size, size*0.95, 0),
+            new BABYLON.Vector3(0, size, 0),
+            new BABYLON.Vector3(0.05*size, size*0.95, 0)
         ]});
         axisY.color = new BABYLON.Color3(0, 1, 0);
         const yChar = makeTextPlane('Y', 'green', size/10);
 
         // z-plane
         const axisZ = BABYLON.MeshBuilder.CreateLines('axisZ', {points: [
-            new BABYLON.Vector3.Zero(), new BABYLON.Vector3(0, 0, size), new BABYLON.Vector3(0, -0.05*size, size*0.95),
-            new BABYLON.Vector3(0, 0, size), new BABYLON.Vector3(0, 0.05*size, size*0.95)
+            new BABYLON.Vector3.Zero(),
+            new BABYLON.Vector3(0, 0, size),
+            new BABYLON.Vector3(0, -0.05*size, size*0.95),
+            new BABYLON.Vector3(0, 0, size),
+            new BABYLON.Vector3(0, 0.05*size, size*0.95)
         ]});
         axisZ.color = new BABYLON.Color3(0, 0, 1);
         const zChar = makeTextPlane('Z', 'blue', size/10);
@@ -131,8 +141,11 @@
             'local_axisX', 
             {
                 points: [
-                    new BABYLON.Vector3.Zero(), new BABYLON.Vector3(size, 0, 0), new BABYLON.Vector3(size*0.95, 0.05*size, 0),
-                    new BABYLON.Vector3(size, 0, 0), new BABYLON.Vector3(size*0.95, -0.05*size, 0)
+                    new BABYLON.Vector3.Zero(),
+                    new BABYLON.Vector3(size, 0, 0),
+                    new BABYLON.Vector3(size*0.95, 0.05*size, 0),
+                    new BABYLON.Vector3(size, 0, 0),
+                    new BABYLON.Vector3(size*0.95, -0.05*size, 0)
                 ]
             },
             scene
@@ -142,8 +155,11 @@
         const local_axisY = BABYLON.MeshBuilder.CreateLines(
             'local_axisY',
             { points: [
-                new BABYLON.Vector3.Zero(), new BABYLON.Vector3(0, size, 0), new BABYLON.Vector3(-0.05*size, size*0.95, 0),
-                new BABYLON.Vector3(0, size, 0), new BABYLON.Vector3(0.05*size, size*0.95, 0)
+                new BABYLON.Vector3.Zero(),
+                new BABYLON.Vector3(0, size, 0),
+                new BABYLON.Vector3(-0.05*size, size*0.95, 0),
+                new BABYLON.Vector3(0, size, 0),
+                new BABYLON.Vector3(0.05*size, size*0.95, 0)
             ]},
             scene
         );
@@ -152,8 +168,11 @@
         const local_axisZ = BABYLON.MeshBuilder.CreateLines(
             'local_axisZ',
             {points: [
-                new BABYLON.Vector3.Zero(), new BABYLON.Vector3(0, 0, size), new BABYLON.Vector3(0, -0.05*size, size*0.95),
-                new BABYLON.Vector3(0, 0, size), new BABYLON.Vector3(0, 0.05*size, size*0.95)
+                new BABYLON.Vector3.Zero(),
+                new BABYLON.Vector3(0, 0, size),
+                new BABYLON.Vector3(0, -0.05*size, size*0.95),
+                new BABYLON.Vector3(0, 0, size),
+                new BABYLON.Vector3(0, 0.05*size, size*0.95)
             ]},
             scene
         );
