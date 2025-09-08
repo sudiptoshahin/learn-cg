@@ -35,9 +35,16 @@ app.get('/village/test-a-village', (req, res) => {
   res.sendFile(path.join(__dirname, 'babylon/test-village-glb.html'));
 });
 
-app.get('/animation/parent-child', (req, res) => {
-  res.sendFile(path.join(__dirname, 'babylon/parent-child.html'));
+/** Mesh parent child */
+app.get('/animation/parent-child/1', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/mesh-parent/parent-child1.html'));
 });
+app.get('/animation/parent-child/2', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/mesh-parent/parent-child2.html'));
+});
+
+
+/** End of Mesh parent child */
 
 // 404 handler (for all other routes)
 app.use((req, res) => {

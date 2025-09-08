@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Babylon.js Sample Code</title>
+
+    <!-- Babylon.js + loaders -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+
+    <style>
+      html,
+      body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+      // Grab canvas
+      const canvas = document.getElementById("renderCanvas");
+      // Create engine
+      const engine = new BABYLON.Engine(canvas, true);
+
+      // Create scene
+      function createScene() {
+        const scene = new BABYLON.Scene(engine);
+        scene.clearColor = new BABYLON.Color3(0.5, 0.5, 0.5);
+
+        // camera
+        const camera = new BABYLON.ArcRotateCamera('camera1', 0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
+        camera.setPosition(new BABYLON.Vector3(6, 8, -7));
+        camera.attachControl(canvas, true);
+
+        // light
+        const light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(-1, 0.5, 0), scene);
+        light.intensity = 0.8;
+
+        const faceColors = [];
+        faceColors[1] = BABYLON.Color3.Purple();
+
+        const faceColors1 = [];
+        faceColors1[1] = BABYLON.Color3.Red();
+
+        const faceColors2 = []
+        faceColors2[1] = BABYLON.Color3.Green();
+
+        const faceColors3 = [];
+        faceColors3[1] = BABYLON.Color3.Blue();
+
+        const box = BABYLON.MeshBuilder.CreateBox("Box", { faceColors: faceColors }, scene);
+        const small1 = BABYLON.MeshBuilder.CreateBox("Small1", {width: 0.25, depth: 0.5, height: 0.75, faceColors: faceColors1}, scene);
+        const small2 = BABYLON.MeshBuilder.CreateBox('Small2', {width: 0.5, depth: 0.25, height: 1.25, faceColors: faceColors2}, scene);
+        const small3 = BABYLON.MeshBuilder.CreateBox('Small3', {width: 0.75, depth: 0.125, height: 2, faceColors: faceColors3}, scene);
+
+        // Setting parent
+        small1.parent = box;
+        small2.setParent(box);
+        box.addChild(small3);
+
+        // Setting Transformations
+        small1.position.y = 1;
+        small2.position.y = 1;
+        small3.position.y = 1;
+
+        small1.position.x = 0;
+
+        small1.rotation.x = Math.PI / 2;
+        small2.rotation.x = Math.PI / 2;
+        small3.rotation.x = Math.PI / 2;
+
+        box.position.x = 1;
+        box.rotation.y = Math.PI / 4;
+
+        const showAxis = function(size) {
+            const makeTextPlane = function (text, color, size) {
+                const dynamicTexture = new BABYLON.DynamicTexture('DynamicTexture', 50, scene, true);
+                dynamicTexture.hasAlpha = true;
+                dynamicTexture.drawText(text, 5, 40, 'bold 36px Arial', color, 'transparent', true);
+                const plane = new BABYLON.Mesh.CreatePlane('TextPlane', size, scene, true);
+                plane.material = new BABYLON.StandardMaterial('TextPlaneMaterial', scene);
+                plane.material.backFuseCulling = false;
+                plane.material.specularColor = new BABYLON.Color3(0, 0, 0);
+                plane.material.diffuseTexture = dynamicTexture;
+                return plane;
+            }
+        }
+
+
+        return scene;
+      }
+
+      const scene = createScene();
+
+      // Render loop
+      engine.runRenderLoop(() => {
+        scene.render();
+      });
+
+      // Resize
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
+    </script>
+  </body>
+</html>
