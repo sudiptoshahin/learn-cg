@@ -37,14 +37,25 @@ app.get('/village/test-a-village', (req, res) => {
 
 /** Mesh parent child */
 app.get('/animation/parent-child/1', (req, res) => {
-  res.sendFile(path.join(__dirname, 'babylon/mesh-parent/parent-child1.html'));
+  res.sendFile(path.join(__dirname, 'babylon/0mesh-parent/parent-child1.html'));
 });
 app.get('/animation/parent-child/2', (req, res) => {
-  res.sendFile(path.join(__dirname, 'babylon/mesh-parent/parent-child2.html'));
+  res.sendFile(path.join(__dirname, 'babylon/0mesh-parent/parent-child2.html'));
+});
+app.get('/animation/parent-child/3', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/0mesh-parent/parent-child3.html'));
+});
+app.get('/animation/parent-child/4', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/0mesh-parent/parent-child4.html'));
+});
+/** End of Mesh parent child */
+
+/** Rotating around axis About a point */
+app.get('/animation/rotating-around-axis/1', (req, res) => {
+  res.sendFile(path.join(__dirname, 'babylon/1rotating-around-axis/rotatingAroundAxis1.html'));
 });
 
-
-/** End of Mesh parent child */
+/** End of rotating around axis About a point */
 
 // 404 handler (for all other routes)
 app.use((req, res) => {
