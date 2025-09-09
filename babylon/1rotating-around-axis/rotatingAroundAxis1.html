@@ -95,10 +95,24 @@
         /** end of Parent at pivot position **/
 
         /** Animation of Rotation **/
-        const angle = 0.05;
+        // const angle = 0.05;
+        // scene.registerAfterRender(() => {
+        //     pivot.rotate(axis, angle, BABYLON.Space.WORLD);
+        // });
+
+        // for oscillation
+        let a = 0;
+        const angle = 0.025;
+        let axisNormal = axis.normalize();  
         scene.registerAfterRender(() => {
-            pivot.rotate(axis, angle, BABYLON.Space.WORLD);
+            a += 0.005;
+            let sign = Math.cos(a)/Math.abs(Math.cos(a));
+            pivot.rotate(axis, angle, BABYLON.Space.LOCAL);
+            // moving pilot along axis
+            pivot.position = pivot.position.add(axisNoramal.scale(0.01*sign));
+            // sphere.position = pilot.position; // set pivot marker position
         });
+
         /** End of Animation of Rotation **/
 
         showAxis(8, scene);
