@@ -75,7 +75,7 @@
         /** Set Center of Rotation (CoR) position, axis and pilot start position **/
         const CoR_At = new BABYLON.Vector3(1, 3, 2);
         const axis = new BABYLON.Vector3(2, 6, 4);
-        const pilotStart = new BABYLON.Vector3(2, 3, 4);
+        const pilotStart = new BABYLON.Vector3(2, 4, 4);
         /** end of CoR **/
 
         /** Draw Axis and Sphere to show Pivot Position **/
@@ -94,6 +94,11 @@
         pilot.position = pilotStart;
         /** end of Parent at pivot position **/
 
+        /** Sphere at pivot position for viewing **/
+        sphere.parent = pivot;
+        sphere.position = pivot.position;
+        /** End of Sphere at Pivot position **/
+
         /** Animation of Rotation **/
         // const angle = 0.05;
         // scene.registerAfterRender(() => {
@@ -109,7 +114,7 @@
             let sign = Math.cos(a)/Math.abs(Math.cos(a));
             pivot.rotate(axis, angle, BABYLON.Space.LOCAL);
             // moving pilot along axis
-            pivot.position = pivot.position.add(axisNoramal.scale(0.01*sign));
+            pivot.position = pivot.position.add(axisNormal.scale(0.01*sign));
             // sphere.position = pilot.position; // set pivot marker position
         });
 
